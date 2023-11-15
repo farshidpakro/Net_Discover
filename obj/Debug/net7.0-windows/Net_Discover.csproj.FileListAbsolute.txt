@@ -1,0 +1,15 @@
+C:\Users\farshid\Desktop\Net_Discover\bin\Debug\net7.0-windows\Net_Discover.exe
+C:\Users\farshid\Desktop\Net_Discover\bin\Debug\net7.0-windows\Net_Discover.deps.json
+C:\Users\farshid\Desktop\Net_Discover\bin\Debug\net7.0-windows\Net_Discover.runtimeconfig.json
+C:\Users\farshid\Desktop\Net_Discover\bin\Debug\net7.0-windows\Net_Discover.dll
+C:\Users\farshid\Desktop\Net_Discover\bin\Debug\net7.0-windows\Net_Discover.pdb
+C:\Users\farshid\Desktop\Net_Discover\obj\Debug\net7.0-windows\Net_Discover.csproj.AssemblyReference.cache
+C:\Users\farshid\Desktop\Net_Discover\obj\Debug\net7.0-windows\Net_Discover.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\farshid\Desktop\Net_Discover\obj\Debug\net7.0-windows\Net_Discover.AssemblyInfoInputs.cache
+C:\Users\farshid\Desktop\Net_Discover\obj\Debug\net7.0-windows\Net_Discover.AssemblyInfo.cs
+C:\Users\farshid\Desktop\Net_Discover\obj\Debug\net7.0-windows\Net_Discover.csproj.CoreCompileInputs.cache
+C:\Users\farshid\Desktop\Net_Discover\obj\Debug\net7.0-windows\Net_Discover.dll
+C:\Users\farshid\Desktop\Net_Discover\obj\Debug\net7.0-windows\refint\Net_Discover.dll
+C:\Users\farshid\Desktop\Net_Discover\obj\Debug\net7.0-windows\Net_Discover.pdb
+C:\Users\farshid\Desktop\Net_Discover\obj\Debug\net7.0-windows\Net_Discover.genruntimeconfig.cache
+C:\Users\farshid\Desktop\Net_Discover\obj\Debug\net7.0-windows\ref\Net_Discover.dll
