@@ -1,5 +1,8 @@
+using System.Diagnostics;
+using System.Net;
 using System.Net.NetworkInformation;
 using System.Net.Sockets;
+using System.Security.Cryptography.X509Certificates;
 
 namespace Net_Discover;
 
@@ -21,7 +24,6 @@ public partial class Form1 : Form
         this.Controls.Add(button1);
         button1.Click += new EventHandler(button1_Click);
         button1.Text = "Network Discover";
-        button1.Location = new Point(70, 70);
         button1.Size = new Size(500, 100);
         button1.Location = new Point(40, 50);
 
@@ -70,7 +72,7 @@ public partial class Form1 : Form
             "\n Interface Description: " + networkInterface.Description +
             "\n Interface Type: " + networkInterface.NetworkInterfaceType +
             "\n Interface Speed: " + networkInterface.Speed +
-            "\n Interface MAC Address: " + networkInterface.GetPhysicalAddress() +
+            "\n Interface MAC Address: " + networkInterface.Id +
             "\n Is Interface Connected: " + networkInterface.OperationalStatus +
             "\n ---------------- \n";
 
@@ -81,25 +83,60 @@ public partial class Form1 : Form
     {
         richTextBox1.Text = "";
 
-        NetworkInterface[] networkInterfaces = NetworkInterface.GetAllNetworkInterfaces();
+        // NetworkInterface[] networkInterfaces = NetworkInterface.GetAllNetworkInterfaces();
 
-        foreach (NetworkInterface networkInterface in networkInterfaces)
+        // foreach (NetworkInterface networkInterface in networkInterfaces)
+        // {
+        //     if (networkInterface.OperationalStatus == OperationalStatus.Up)
+        //     {
+        //         IPInterfaceProperties ipProperties = networkInterface.GetIPProperties();
+
+        //         foreach (UnicastIPAddressInformation ip in ipProperties.UnicastAddresses)
+        //         {
+        //             if (ip.Address.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)
+        //             {
+        //                 richTextBox1.Text += "Interface: " + networkInterface.Name +
+        //                  "\n IP Address: " + ip.Address.ToString() +
+        //                  "\n ---------------- \n";
+        //             }
+        //         }
+        //     }
+        // }
+// string hostName = Dns.GetHostName(); // Retrive the Name of HOST
+//             Console.WriteLine(hostName);
+//            // Get the IP
+            
+//             //string myIP = Dns.GetHostByName(hostName).AddressList[0].ToString();
+//             for(int x = 0 ;  Dns.GetHostByName(hostName).AddressList.Count() < x ; x++) 
+//              {
+
+//                      richTextBox1.Text += Dns.GetHostByName(hostName).AddressList[x].ToString();
+
+//              }
+ ProcessStartInfo psi = new ProcessStartInfo("arp", "-a")
         {
-            if (networkInterface.OperationalStatus == OperationalStatus.Up)
-            {
-                IPInterfaceProperties ipProperties = networkInterface.GetIPProperties();
+            RedirectStandardOutput = true,
+            UseShellExecute = false,
+            CreateNoWindow = true
+        };
 
-                foreach (UnicastIPAddressInformation ip in ipProperties.UnicastAddresses)
-                {
-                    if (ip.Address.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)
-                    {
-                        richTextBox1.Text += "Interface: " + networkInterface.Name +
-                         "\n IP Address: " + ip.Address.ToString() +
-                         "\n ---------------- \n";
-                    }
-                }
+        Process process = Process.Start(psi);
+        string output = process.StandardOutput.ReadToEnd();
+        process.WaitForExit();
+
+        string[] lines = output.Split(new[] { "\r\n", "\n" }, StringSplitOptions.RemoveEmptyEntries);
+
+        foreach (string line in lines)
+        {
+            string[] parts = line.Split(new char[] { ' ', '\t' }, StringSplitOptions.RemoveEmptyEntries);
+            if (parts.Length == 3 && parts[1] != "dynamic")
+            {
+                string ipAddress = parts[0];
+                richTextBox1.Text += ipAddress + "\n";
             }
         }
+    
+
     }
     private void button3_Click(object sender, EventArgs e)
     {
