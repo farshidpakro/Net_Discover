@@ -129,10 +129,10 @@ public partial class Form1 : Form
         foreach (string line in lines)
         {
             string[] parts = line.Split(new char[] { ' ', '\t' }, StringSplitOptions.RemoveEmptyEntries);
-            if (parts.Length == 3 && parts[1] != "dynamic")
+            if (parts.Length == 3 && parts[1] != "dynamic" && parts[0].Split('.')[0] =="192" )
             {
                 string ipAddress = parts[0];
-                richTextBox1.Text += ipAddress + "\n";
+                richTextBox1.Text += ipAddress + "\n" +  "\n ---------------- \n";
             }
         }
     
@@ -141,14 +141,36 @@ public partial class Form1 : Form
     private void button3_Click(object sender, EventArgs e)
     {
         richTextBox1.Text = "";
-        NetworkInterface[] networkInterfaces = NetworkInterface.GetAllNetworkInterfaces();
+        // NetworkInterface[] networkInterfaces = NetworkInterface.GetAllNetworkInterfaces();
 
-        foreach (NetworkInterface networkInterface in networkInterfaces)
+        // foreach (NetworkInterface networkInterface in networkInterfaces)
+        // {
+        //     PhysicalAddress macAddress = networkInterface.GetPhysicalAddress();
+        //     richTextBox1.Text += "Interface Name: " + networkInterface.Name +
+        //    "\n MAC Address: " + macAddress.ToString() +
+        //    "\n ---------------- \n";
+        // }
+         ProcessStartInfo psi = new ProcessStartInfo("arp", "-a")
         {
-            PhysicalAddress macAddress = networkInterface.GetPhysicalAddress();
-            richTextBox1.Text += "Interface Name: " + networkInterface.Name +
-           "\n MAC Address: " + macAddress.ToString() +
-           "\n ---------------- \n";
+            RedirectStandardOutput = true,
+            UseShellExecute = false,
+            CreateNoWindow = true
+        };
+
+        Process process = Process.Start(psi);
+        string output = process.StandardOutput.ReadToEnd();
+        process.WaitForExit();
+
+        string[] lines = output.Split(new[] { "\r\n", "\n" }, StringSplitOptions.RemoveEmptyEntries);
+
+        foreach (string line in lines)
+        {
+            string[] parts = line.Split(new char[] { ' ', '\t' }, StringSplitOptions.RemoveEmptyEntries);
+            if (parts.Length == 3 && parts[1] != "dynamic" && parts[0].Split('.')[0] =="192"  )
+            {
+                string ipAddress = parts[0];
+                richTextBox1.Text += ipAddress  + "  :  " + parts[1] + "\n" +  "\n ---------------- \n";
+            }
         }
     }
     private void button4_Click(object sender, EventArgs e)
@@ -157,25 +179,48 @@ public partial class Form1 : Form
         List<string> list = new List<string>();
 
         
-        NetworkInterface[] networkInterfaces = NetworkInterface.GetAllNetworkInterfaces();
+        // NetworkInterface[] networkInterfaces = NetworkInterface.GetAllNetworkInterfaces();
 
-        foreach (NetworkInterface networkInterface in networkInterfaces)
+        // foreach (NetworkInterface networkInterface in networkInterfaces)
+        // {
+        //     if (networkInterface.OperationalStatus == OperationalStatus.Up)
+        //     {
+        //         IPInterfaceProperties ipProperties = networkInterface.GetIPProperties();
+
+        //         foreach (UnicastIPAddressInformation ip in ipProperties.UnicastAddresses)
+        //         {
+        //             if (ip.Address.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)
+        //             {
+
+        //                 list.Add(ip.Address.ToString());
+
+        //             }
+        //         }
+        //     }
+        // }
+        ProcessStartInfo psi = new ProcessStartInfo("arp", "-a")
         {
-            if (networkInterface.OperationalStatus == OperationalStatus.Up)
+            RedirectStandardOutput = true,
+            UseShellExecute = false,
+            CreateNoWindow = true
+        };
+
+        Process process = Process.Start(psi);
+        string output = process.StandardOutput.ReadToEnd();
+        process.WaitForExit();
+
+        string[] lines = output.Split(new[] { "\r\n", "\n" }, StringSplitOptions.RemoveEmptyEntries);
+
+        foreach (string line in lines)
+        {
+            string[] parts = line.Split(new char[] { ' ', '\t' }, StringSplitOptions.RemoveEmptyEntries);
+            if (parts.Length == 3 && parts[1] != "dynamic" && parts[0].Split('.')[0] =="192" )
             {
-                IPInterfaceProperties ipProperties = networkInterface.GetIPProperties();
-
-                foreach (UnicastIPAddressInformation ip in ipProperties.UnicastAddresses)
-                {
-                    if (ip.Address.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)
-                    {
-
-                        list.Add(ip.Address.ToString());
-
-                    }
-                }
+                string ipAddress = parts[0];
+              list.Add(ipAddress);
             }
         }
+    
         list.RemoveAll(ip => ip == "127.0.0.1");
         string[] ipAddresses = list.ToArray();
          foreach (string ip in ipAddresses)
